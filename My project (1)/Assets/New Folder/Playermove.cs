@@ -11,7 +11,9 @@ public class Playermove : MonoBehaviour
     Animator animator;
     bool isDamaged = false;
     Vector3 startPos;
-    
+    float maxDistance = 0f;
+    public TimeController timeController; // TimeController 연결용 변수
+    public float MaxDistance => maxDistance;  // 다른 스크립트(TimeController) 연동
 
     void Start()
     {
@@ -83,6 +85,12 @@ public class Playermove : MonoBehaviour
         {
             Respawn();
         }
+        // 최대 이동 거리 측정
+        float currentDistance = transform.position.x - startPos.x;
+        if (currentDistance > maxDistance)
+        {
+            maxDistance = currentDistance;
+        }
 
     }
     void OnCollisionEnter2D(Collision2D collision)
@@ -116,7 +124,15 @@ public class Playermove : MonoBehaviour
         transform.position = startPos; // 시작 위치로 이동
         rigid.velocity = Vector2.zero; // 속도 초기화
     }
-
+    void OnTriggerEnter2D(Collider2D other) // 깃발 도착 감지
+    {
+        if (other.CompareTag("Finish"))
+        {
+            if (timeController != null)
+                timeController.isTimeOver = true;
+            UnityEngine.SceneManagement.SceneManager.LoadScene("end");
+        }
+    }
 }
 
 
