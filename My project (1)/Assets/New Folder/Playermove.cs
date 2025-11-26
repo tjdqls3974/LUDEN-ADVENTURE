@@ -11,6 +11,7 @@ public class Playermove : MonoBehaviour
     Animator animator;
     bool isDamaged = false;
     Vector3 startPos;
+    
 
     void Start()
     {
@@ -43,7 +44,7 @@ public class Playermove : MonoBehaviour
         // 착지빔
         if (rigid.velocity.y < 0) { 
             Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
-            RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector3.down, 1f, LayerMask.GetMask("Platform"));
+            RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector3.down, 1.1f, LayerMask.GetMask("Platform"));
             if (rayHit.collider != null)
             {
                 if (rayHit.distance < 1f)
@@ -56,7 +57,7 @@ public class Playermove : MonoBehaviour
     void Update()
     {
         //저어엄프
-        if (Input.GetButtonDown("Jump") && Mathf.Abs(rigid.velocity.y) < 0.01f)  // <- 중복점프 야다
+        if (Input.GetButtonDown("Jump") && Mathf.Abs(rigid.velocity.y) < 0.2f)  // <- 중복점프 야다 # 원래 0.01에서 0.2로 수정 ( 점프 씹힘 테스트 )
         {
             rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
             animator.SetBool("isjumping", true);
