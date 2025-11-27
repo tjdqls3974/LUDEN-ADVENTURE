@@ -11,9 +11,13 @@ public class TimeController : MonoBehaviour
     public bool isTimeOver = false; // true= 타이머 정지
     public float displayTime = 0;   // 표시 시간
 
+    public Playermove player;      // 플레이어 오브젝트
+
     public TextMeshProUGUI timeText; // UI에 연결할 TMP 텍스트
 
     float times = 0;                // 현재 시간
+
+    private data data; // data ����� ����
 
     void Start()
     {
@@ -21,6 +25,8 @@ public class TimeController : MonoBehaviour
         {
             displayTime = gameTime;
         }
+
+        data = FindObjectOfType<data>();
         UpdateTimeText(); // 처음부터 표시
     }
 
@@ -38,6 +44,9 @@ public class TimeController : MonoBehaviour
                     isTimeOver = true;
 
                     // 씬 이동
+                    data.attempts = player.attempts;
+                    data.cleared = false;
+                    data.record = "99:99:99";
                     SceneManager.LoadScene("end");
                 }
             }
@@ -60,6 +69,12 @@ public class TimeController : MonoBehaviour
     {
         int intTime = Mathf.CeilToInt(displayTime); // 남은 시간 정수화 (10.9초 → 11)
         timeText.text = intTime.ToString();
+    }
+
+    public string GetTimeString(int maxTime)
+    {
+        int intTime = maxTime - Mathf.CeilToInt(displayTime);
+        return intTime.ToString();
     }
 }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Playermove : MonoBehaviour
 {
+    public int attempts = 0;
     public float maxSpeed;
     public float jumpPower;
     Rigidbody2D rigid;
@@ -12,13 +13,20 @@ public class Playermove : MonoBehaviour
     bool isDamaged = false;
     Vector3 startPos;
     float maxDistance = 0f;
-    public TimeController timeController; // TimeController ¿¬°á¿ë º¯¼ö
-    public float MaxDistance => maxDistance;  // ´Ù¸¥ ½ºÅ©¸³Æ®(TimeController) ¿¬µ¿
+    public TimeController timeController; // TimeController ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public float MaxDistance => maxDistance;  // ï¿½Ù¸ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ®(TimeController) ï¿½ï¿½ï¿½ï¿½
+
+    private data data; // data ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     void Start()
     {
         animator = GetComponent<Animator>();
-        startPos = transform.position; // ½ÃÀÛ À§Ä¡ ÀúÀå
+        startPos = transform.position; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
+        attempts = 0;
+        data = FindObjectOfType<data>();
+        Debug.Log("Player Name: " + data.name);
+        Debug.Log("Student Number: " + data.stnum);
+        Debug.Log("Contacts: " + data.contacts);
     }
     void Awake()
     {
@@ -28,22 +36,22 @@ public class Playermove : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // ÀÌ°Å½¼ ¿òÁ÷ÀÌ´Â°Å¿ä
+        // ï¿½Ì°Å½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì´Â°Å¿ï¿½
         if (!isDamaged)
         {
             float h = Input.GetAxisRaw("Horizontal");
             rigid.AddForce(Vector2.right * h, ForceMode2D.Impulse);
         }
-        // ÀÌ°Å½¼ ¼Óµµ Á¦ÇÑÀÌ¶ó´Â°Å½Ã´Ù
+        // ï¿½Ì°Å½ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¶ï¿½Â°Å½Ã´ï¿½
         if (!isDamaged)
         {
-            if (rigid.velocity.x > maxSpeed) // ¿À¸¥ÂÊ ¼ÓµµÁ¦ÇÑ
+            if (rigid.velocity.x > maxSpeed) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½
                 rigid.velocity = new Vector2(maxSpeed, rigid.velocity.y);
-            else if (rigid.velocity.x < maxSpeed * (-1)) // ¿ÞÂÊ ¼ÓµµÁ¦ÇÑ
+            else if (rigid.velocity.x < maxSpeed * (-1)) // ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½
                 rigid.velocity = new Vector2(maxSpeed * (-1), rigid.velocity.y);
         }
 
-        // ÂøÁöºö
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (rigid.velocity.y < 0) { 
             Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
             RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector3.down, 1.1f, LayerMask.GetMask("Platform"));
@@ -58,36 +66,37 @@ public class Playermove : MonoBehaviour
     }
     void Update()
     {
-        //Àú¾î¾öÇÁ
-        if (Input.GetButtonDown("Jump") && Mathf.Abs(rigid.velocity.y) < 0.2f)  // <- Áßº¹Á¡ÇÁ ¾ß´Ù # ¿ø·¡ 0.01¿¡¼­ 0.2·Î ¼öÁ¤ ( Á¡ÇÁ ¾ÃÈû Å×½ºÆ® )
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        if (Input.GetButtonDown("Jump") && Mathf.Abs(rigid.velocity.y) < 0.2f)  // <- ï¿½ßºï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß´ï¿½ # ï¿½ï¿½ï¿½ï¿½ 0.01ï¿½ï¿½ï¿½ï¿½ 0.2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ( ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ® )
         {
             rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
             animator.SetBool("isjumping", true);
         }
 
-        // Å° ¶¼¸é ¸ØÃã
+        // Å° ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (Input.GetButtonUp("Horizontal"))
         {
             rigid.velocity = new Vector2(0, rigid.velocity.y);
         }
-        // ¹æÇâÀüÈ¯
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¯
         if (rigid.velocity.x < 0)
             spriteRenderer.flipX = true;
         else if (rigid.velocity.x > 0)
             spriteRenderer.flipX = false;
-        // ÀÌ°Å½¼ ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ¶ó´Â°Å½Ã´Ù.
+        // ï¿½Ì°Å½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½Ì¶ï¿½Â°Å½Ã´ï¿½.
         if (rigid.velocity.normalized.x == 0)
             animator.SetBool("iswalking", false);
         else
             animator.SetBool("iswalking", true);
-        //³«»çÃ³¸®
-        if (transform.position.y < -10f) // yÁÂÇ¥ -10 ÀÌÇÏ·Î ¶³¾îÁö¸é
+        //ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ï¿½
+        if (transform.position.y < -10f) // yï¿½ï¿½Ç¥ -10 ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         {
             Respawn();
         }
-        // ÃÖ´ë ÀÌµ¿ °Å¸® ÃøÁ¤
-        float currentDistance = transform.position.x - startPos.x;
-        if (currentDistance > maxDistance)
+        // ï¿½Ö´ï¿½ ï¿½Ìµï¿½ ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // float currentDistance = transform.position.x - startPos.x;
+        float distance = Vector2.Distance(transform.position, startPos.position);
+        if (distance > maxDistance)
         {
             maxDistance = currentDistance;
         }
@@ -97,8 +106,8 @@ public class Playermove : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            // ÇÔÁ¤Ä«µå ¹ßµ¿
-            Debug.Log("³Ê´Â ¹Ì³¢¸¦ ¹°¾î¹ö¸° °ÍÀÌ¿©"); // ³ªÁß¿¡ Áö¿ö¾ßÇÏ¿À
+            // ï¿½ï¿½ï¿½ï¿½Ä«ï¿½ï¿½ ï¿½ßµï¿½
+            Debug.Log("ï¿½Ê´ï¿½ ï¿½Ì³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¿ï¿½"); // ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½
             Ondamaged();
         }
     }
@@ -106,31 +115,35 @@ public class Playermove : MonoBehaviour
     void Ondamaged()
     {
         isDamaged = true;
-        gameObject.layer = 11; // ÇÇ°Ý·¹ÀÌ¾î·Î º¯°æ
-        spriteRenderer.color = new Color(1, 1, 1, 0.4f);// Åõ¸íµµ Á¶Àý
+        gameObject.layer = 11; // ï¿½Ç°Ý·ï¿½ï¿½Ì¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        spriteRenderer.color = new Color(1, 1, 1, 0.4f);// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         rigid.velocity = Vector2.zero;
         rigid.AddForce(new Vector2(-30, 10) , ForceMode2D.Impulse);
         Invoke("Offdamaged", 2);
-        animator.SetTrigger("doDamaged"); // ¾Ö´Ï
+        animator.SetTrigger("doDamaged"); // ï¿½Ö´ï¿½
     }
     void Offdamaged()
     {
         isDamaged = false;
-        gameObject.layer = 10; // ÀÏ¹Ý·¹ÀÌ¾î·Î º¯°æ
-        spriteRenderer.color = new Color(1, 1, 1, 1);// Åõ¸íµµ ¿ø»óº¹±¸
+        gameObject.layer = 10; // ï¿½Ï¹Ý·ï¿½ï¿½Ì¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        spriteRenderer.color = new Color(1, 1, 1, 1);// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½óº¹±ï¿½
     }
     void Respawn()
     {
-        transform.position = startPos; // ½ÃÀÛ À§Ä¡·Î ÀÌµ¿
-        rigid.velocity = Vector2.zero; // ¼Óµµ ÃÊ±âÈ­
+        transform.position = startPos; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½
+        rigid.velocity = Vector2.zero; // ï¿½Óµï¿½ ï¿½Ê±ï¿½È­
+        data.attempts++; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1 ï¿½ï¿½ï¿½
     }
-    void OnTriggerEnter2D(Collider2D other) // ±ê¹ß µµÂø °¨Áö
+    void OnTriggerEnter2D(Collider2D other) // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         if (other.CompareTag("Finish"))
         {
             if (timeController != null)
                 timeController.isTimeOver = true;
             UnityEngine.SceneManagement.SceneManager.LoadScene("end");
+            data.attempts = attempts;
+            data.cleared = true;
+            data.record = timeController.GetTimeString(150);
         }
     }
 }

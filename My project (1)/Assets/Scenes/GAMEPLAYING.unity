@@ -5704,9 +5704,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isCountDown: 1
-  gameTime: 100
+  gameTime: 120
   isTimeOver: 0
   displayTime: 0
+  player: {fileID: 999749379}
   timeText: {fileID: 498316538}
 --- !u!1 &427101171
 GameObject:
@@ -5818,7 +5819,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 498316535}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 444}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6976,6 +6977,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21af56abb8c6afd4a8fd52d66713b00f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attempts: 0
   maxSpeed: 7.5
   jumpPower: 15
   timeController: {fileID: 423743869}
@@ -7241,7 +7243,7 @@ Transform:
   m_GameObject: {fileID: 1288036381}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.783334, y: 2.4666667, z: 4.866667}
+  m_LocalPosition: {x: -4.783334, y: 2.4666667, z: 7}
   m_LocalScale: {x: 4.0582666, y: 2.9031334, z: 0.33333334}
   m_ConstrainProportionsScale: 0
   m_Children:
