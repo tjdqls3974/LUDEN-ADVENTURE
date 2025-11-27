@@ -16,6 +16,7 @@ public class data : MonoBehaviour
     public int attempts;
     public bool cleared;
     public string record;
+    public string distance;
 
 
     // Start is called before the first frame update

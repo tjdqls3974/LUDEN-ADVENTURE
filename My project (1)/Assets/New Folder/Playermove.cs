@@ -95,10 +95,11 @@ public class Playermove : MonoBehaviour
         }
         // �ִ� �̵� �Ÿ� ����
         // float currentDistance = transform.position.x - startPos.x;
-        float distance = Vector2.Distance(transform.position, startPos.position);
+        float distance = Vector2.Distance(transform.position, startPos);
         if (distance > maxDistance)
         {
-            maxDistance = currentDistance;
+            maxDistance = distance;
+            data.distance = Mathf.CeilToInt(maxDistance).ToString();
         }
 
     }
@@ -143,7 +144,7 @@ public class Playermove : MonoBehaviour
             UnityEngine.SceneManagement.SceneManager.LoadScene("end");
             data.attempts = attempts;
             data.cleared = true;
-            data.record = timeController.GetTimeString(150);
+            data.record = timeController.FormatTime(timeController.times);
         }
     }
 }

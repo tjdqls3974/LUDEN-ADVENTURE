@@ -23,16 +23,16 @@ public class api : MonoBehaviour
     public void OnButtonClick()
     {
         // 데이터 전송 시작
-        StartCoroutine(SendPostDataRequest(data.name, data.stnum, data.contacts, data.attempts, data.cleared, data.record));
+        StartCoroutine(SendPostDataRequest(data.name, data.stnum, data.contacts, data.attempts, data.cleared, data.record, data.distance));
     }
 
     // ---------------------------------------------------------
     // 1. 데이터 전송 및 성공 시 씬 전환 기능
     // ---------------------------------------------------------
-    private IEnumerator SendPostDataRequest(string name, int stnum, string contacts, int attempts, bool clear, string record)
+    private IEnumerator SendPostDataRequest(string name, int stnum, string contacts, int attempts, bool clear, string record, string distance)
     {
         // JSON 생성
-        string jsonPayload = "{\"name\": \"" + name + "\", \"stnum\": \"" + stnum + "\", \"contacts\": \"" + contacts + "\", \"attempts\": " + attempts + ", \"cleared\": " + clear.ToString().ToLower() + ", \"record\": \"" + record + "\"}";
+        string jsonPayload = "{\"name\": \"" + name + "\", \"stnum\": \"" + stnum + "\", \"contacts\": \"" + contacts + "\", \"attempts\": " + attempts + ", \"cleared\": " + clear.ToString().ToLower() + ", \"record\": \"" + record + "\", \"distance\": \"" + distance + "\"}";
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
 
         UnityWebRequest request = new UnityWebRequest(apiURL + "csv/", "POST");
@@ -73,7 +73,7 @@ public class api : MonoBehaviour
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
 
         // URL 설정 (apiURL + "check/")
-        UnityWebRequest request = new UnityWebRequest(apiURL + "check/", "POST");
+        UnityWebRequest request = new UnityWebRequest(apiURL + "check", "POST");
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
