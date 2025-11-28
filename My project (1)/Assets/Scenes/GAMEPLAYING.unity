@@ -5711,6 +5711,7 @@ MonoBehaviour:
   player: {fileID: 999749379}
   timeText: {fileID: 498316538}
   distanceText: {fileID: 881918397}
+  times: 0
 --- !u!1 &427101171
 GameObject:
   m_ObjectHideFlags: 0

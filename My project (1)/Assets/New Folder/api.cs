@@ -52,6 +52,7 @@ public class api : MonoBehaviour
             
             // [수정됨] 요청이 성공했으므로 씬을 넘깁니다.
             SceneManager.LoadScene(nextSceneName);
+            Destroy(data);
         }
     }
 
