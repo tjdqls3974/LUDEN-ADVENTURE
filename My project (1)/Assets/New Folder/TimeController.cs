@@ -45,10 +45,10 @@ public class TimeController : MonoBehaviour
                     isTimeOver = true;
 
                     // 씬 이동
-                    data.attempts = player.attempts;
                     data.cleared = false;
                     data.record = "99:99:999";
                     SceneManager.LoadScene("end");
+                
                 }
             }
             else
